@@ -94,7 +94,7 @@ class Payment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class coupon(models.Model):
+class Coupon(models.Model):
     code = models.CharField(max_length=50, unique=True)
     discount_type = models.CharField(max_length=20, choices=[('percentage', 'Percentage'), ('fixed', 'Fixed Amount')])
     discount_value = models.DecimalField(max_digits=10, decimal_places=2)
@@ -104,7 +104,7 @@ class coupon(models.Model):
     end_date = models.DateTimeField()
     is_active = models.BooleanField(default=True)
 
-class review(models.Model):
+class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     rating = models.PositiveIntegerField(default=1)  # Assuming rating is from 1 to 5
@@ -126,7 +126,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-class blog(models.Model):
+class Blog(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     content = models.TextField()
@@ -145,31 +145,56 @@ class Contact(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+class FAQ(models.Model):
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Analytics(models.Model):
+    sales = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    traffic = models.PositiveIntegerField(default=0)
+    popular_products = models.ManyToManyField(Product, related_name='popular_analytics', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Configuration(models.Model):
+    site_name = models.CharField(max_length=100, default='Sell Your Projects')
+    site_description = models.TextField(default='Welcome to our site.')
+    site_logo = models.ImageField(upload_to='logos', null=True, blank=True)
+
+class Tax(models.Model):
+    name = models.CharField(max_length=100)
+    rate = models.DecimalField(max_digits=5, decimal_places=2)  # e.g., 5.00 for 5%
+    country = models.CharField(max_length=100, null=True, blank=True)  # Optional country-specific tax
+    state = models.CharField(max_length=100, null=True, blank=True)  #
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
+    email = models.EmailField(unique=True)
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class Refund(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='refunds')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    reason = models.TextField()
+    status = models.CharField(max_length=20, default='Pending')  # e.g., 'Pending', 'Approved', 'Rejected'
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    processed_at = models.DateTimeField(null=True, blank=True)  # When the refund was processed
 
 
 
