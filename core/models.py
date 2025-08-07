@@ -9,6 +9,9 @@ class User(models.Model):
     is_vendor = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.username
+
 class Vendor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='vendor')
     bio = models.TextField()
@@ -16,6 +19,9 @@ class Vendor(models.Model):
     bank_details = models.TextField()
     shipping_details = models.TextField()
     return_policy = models.TextField()
+
+    def __str__(self):
+        return f"Vendor: {self.user.username}"
 
 
 class Category(models.Model):
@@ -52,11 +58,17 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"Order {self.id} by {self.user.username} for {self.vendor.user.username}"
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name} in Order {self.order.id}"
 
 
 class Cart(models.Model):
@@ -66,6 +78,8 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"Cart {self.id} for {self.user.username}"
 
 
 class CartItem(models.Model):
@@ -74,12 +88,18 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name} in Cart {self.cart.id}"
+
 
 
 class Shipping(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     rating = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    
+    def __str__(self):
+        return self.name 
 
 
 
@@ -93,6 +113,9 @@ class Payment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"Payment {self.id} for Order {self.order.id}"
+
 
 class Coupon(models.Model):
     code = models.CharField(max_length=50, unique=True)
@@ -104,6 +127,9 @@ class Coupon(models.Model):
     end_date = models.DateTimeField()
     is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.code
+
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
@@ -112,11 +138,17 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"Review by {self.user.username} for {self.product.name} - Rating: {self.rating}"
+
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist')
     product = models.ManyToManyField(Product, related_name='wishlists')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Wishlist for {self.user.username}"
 
 
 class Notification(models.Model):

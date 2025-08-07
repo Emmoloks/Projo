@@ -5,7 +5,7 @@ from .models import (
     User, Category, Product, Order, OrderItem, Cart, CartItem,
     Vendor, Review, Coupon, Refund, Blog, Shipping, Payment,
     Wishlist, Notification, Contact, Analytics, Configuration,
-    Subscription, Tax
+    Subscription, Tax,
 )
 
 from .serializers import (
