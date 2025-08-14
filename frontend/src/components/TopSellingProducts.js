@@ -11,6 +11,7 @@ const TopSellingProducts = ({ products }) => {
           .map((product) => (
             <li key={product.id}>
               <Link to={`/products/${product.slug}`}>{product.name}</Link>
+              <img src="{product.image}" alt="{product.name}"/>
             </li>
           ))}
       </ul>
