@@ -1,18 +1,16 @@
-import {configureStore, applyMiddleware, combineReducers} from 'redux';
-import thunk from 'redux-thunk';
-import categoriesReducers from './reducers/categoriesReducer';
-import productsReducers from './reducers/productsReducer';
-
-
+import {legacy_createStore as createStore, applyMiddleware, combineReducers} from 'redux';
+import { thunk } from 'redux-thunk';
+import categoriesReducers from './categoriesReducer';
+import productsReducers from './productReducer';
 
 const rootReducer = combineReducers({
   categories: categoriesReducers,
   products: productsReducers
 });
 
-const store = configureStore({
-  reducer: rootReducer,
-  middleware: [thunk]
-});
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+);
 
 export default store;

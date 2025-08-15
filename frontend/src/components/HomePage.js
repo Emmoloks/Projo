@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { fetchCategories } from "../redux/actions/categoriesActions";
-import { fetchProducts } from "../redux/actions/productsActions";
+import { fetchProducts } from "../redux/actions/productActions";
 
 import  CategoryList from "../components/CategoryList";
 import  FlashSaleProducts from "../components/FlashSaleProducts";

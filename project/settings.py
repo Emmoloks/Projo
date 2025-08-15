@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',  # Custom app for core functionality
     'rest_framework',  # Django REST framework for API development
+    'corsheaders',  # CORS headers for API
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React app
+]
+
+CORS_ALLOW_HEADERS = [
+    "user-agent",
+    "accept",
+    "content-type",
+    "authorization",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
 
 ROOT_URLCONF = 'project.urls'
 
